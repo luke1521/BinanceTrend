@@ -1,47 +1,52 @@
 {
     "uptrend_list": [
-        "CHRUSDT",
+        "MKRUSDT",
         "SSVUSDT",
-        "ARBUSDT",
-        "ENSUSDT",
         "LDOUSDT",
-        "MKRUSDT"
+        "CHRUSDT",
+        "ENSUSDT",
+        "ARBUSDT"
     ],
-    "uptrend_entry": [],
+    "uptrend_entry": [
+        "SSVUSDT"
+    ],
     "downtrend_list": [
-        "1000LUNCUSDT",
-        "ACEUSDT",
-        "PYTHUSDT",
-        "YFIUSDT",
-        "COMBOUSDT",
+        "MEMEUSDT",
         "ALPHAUSDT",
-        "1000BONKUSDT",
-        "STORJUSDT",
+        "YFIUSDT",
+        "USTCUSDT",
         "LUNA2USDT",
+        "1000LUNCUSDT",
+        "STORJUSDT",
+        "ACEUSDT",
+        "1000BONKUSDT",
+        "COMBOUSDT",
         "JTOUSDT",
         "AUCTIONUSDT",
-        "USTCUSDT",
-        "MEMEUSDT"
+        "PYTHUSDT"
     ],
     "downtrend_entry": [
-        "1000LUNCUSDT",
-        "PYTHUSDT",
-        "YFIUSDT",
-        "COMBOUSDT",
+        "MEMEUSDT",
         "ALPHAUSDT",
-        "1000BONKUSDT",
-        "STORJUSDT",
-        "LUNA2USDT",
-        "JTOUSDT",
+        "YFIUSDT",
         "USTCUSDT",
-        "MEMEUSDT"
+        "LUNA2USDT",
+        "1000LUNCUSDT",
+        "STORJUSDT",
+        "ACEUSDT",
+        "1000BONKUSDT",
+        "COMBOUSDT",
+        "JTOUSDT",
+        "PYTHUSDT"
     ],
     "sideway_long_entry": [],
     "sideway_short_entry": [
         "BTCUSDT",
+        "RIFUSDT",
         "TUSDT",
         "STXUSDT",
         "INJUSDT",
-        "RIFUSDT"
+        "BTCDOMUSDT",
+        "BTCUSDT_240329"
     ]
 }

@@ -81,35 +81,41 @@ def step2():
             sideway_short_entry_new = list(set(sideway_short_entry) - set(sideway_short_entry_old))
 
             uptrend_list_new_str = "*UPDATE:  " + str(uptrend_list_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace("]", "") + "*"
+                "['", "").replace("']", "").replace("[", "").replace(
+                "]", "").replace("_", "") + "*"
             uptrend_entry_new_str = "*UPDATE:  " + str(uptrend_entry_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace("]", "") + "*"
+                "['", "").replace("']", "").replace("[", "").replace(
+                "]", "").replace("_", "") + "*"
             downtrend_list_new_str = "*UPDATE:  " + str(downtrend_list_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace("]", "") + "*"
+                "['", "").replace("']", "").replace("[", "").replace(
+                "]", "").replace("_", "") + "*"
             downtrend_entry_new_str = "*UPDATE:  " + str(downtrend_entry_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace("]", "") + "*"
+                "['", "").replace("']", "").replace("[", "").replace(
+                "]", "").replace("_", "") + "*"
             sideway_long_entry_new_str = "*UPDATE:  " + str(sideway_long_entry_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace("]", "") + "*"
+                "['", "").replace("']", "").replace("[", "").replace(
+                "]", "").replace("_", "") + "*"
             sideway_short_entry_new_str = "*UPDATE:  " + str(sideway_short_entry_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace("]", "") + "*"
+                "['", "").replace("']", "").replace("[", "").replace(
+                "]", "").replace("_", "") + "*"
 
             uptrend_list_str = "UPTREND LIST:  " + str(uptrend_list).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace(
+                                "['", "").replace("']", "").replace("_", "").replace(
                                 "[", "").replace("]", "") + "\n" + uptrend_list_new_str
             uptrend_entry_str = "UPTREND ENTRY:  "+str(uptrend_entry).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace(
+                                "['", "").replace("']", "").replace("_", "").replace(
                                 "[", "").replace("]", "") + "\n" + uptrend_entry_new_str
             downtrend_list_str = "DOWNTREND LIST:  " + str(downtrend_list).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace(
+                                "['", "").replace("']", "").replace("_", "").replace(
                                 "[", "").replace("]", "") + "\n" + downtrend_list_new_str
             downtrend_entry_str = "DOWNTREND ENTRY:  "+str(downtrend_entry).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace(
+                                "['", "").replace("']", "").replace("_", "").replace(
                                 "[", "").replace("]", "") + "\n" + downtrend_entry_new_str
             sideway_long_entry_str = "SIDEWAY LONG:  "+str(sideway_long_entry).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace(
+                                "['", "").replace("']", "").replace("_", "").replace(
                                 "[", "").replace("]", "") + "\n" + sideway_long_entry_new_str
             sideway_short_entry_str = "SIDEWAY SHORT:  "+str(sideway_short_entry).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace(
+                                "['", "").replace("']", "").replace("_", "").replace(
                                 "[", "").replace("]", "") + "\n" + sideway_short_entry_new_str
 
             message = (uptrend_list_str + "\n\n" + uptrend_entry_str + "\n\n" + downtrend_list_str + "\n\n" +

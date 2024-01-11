@@ -123,6 +123,8 @@ def step2():
             print(message)
             telegram_message = func_claculate_trend.send_telegram_message(message)
             print(telegram_message)
+            json_file.close()
+            json_file2.close()
 
 
 if __name__ == "__main__":

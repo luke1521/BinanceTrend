@@ -91,7 +91,10 @@ def get_up_trend_entry_zone(uptrend_tickers, kline):
     for ticker1 in ema_fast.keys():
         for ticker2 in ema_slow.keys():
             if ticker1 == ticker2:
-                if ema_fast[ticker1] > ema_slow[ticker1]:
+                ema13np = np.array(ema_fast[ticker1])
+                ema21np = np.array(ema_slow[ticker2])
+
+                if np.all(ema13np < ema21np):
                     up_trend_entry_ticker.append(ticker1)
 
     return up_trend_entry_ticker
@@ -140,7 +143,10 @@ def get_down_trend_entry_zone(uptrend_tickers, kline):
     for ticker1 in ema_fast.keys():
         for ticker2 in ema_slow.keys():
             if ticker1 == ticker2:
-                if ema_fast[ticker1] < ema_slow[ticker1]:
+                ema13np = np.array(ema_fast[ticker1])
+                ema21np = np.array(ema_slow[ticker2])
+
+                if np.all(ema13np > ema21np):
                     down_trend_entry_ticker.append(ticker1)
 
     return down_trend_entry_ticker

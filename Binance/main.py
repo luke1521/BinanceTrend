@@ -34,7 +34,13 @@ def step1():
 
 
 def step2():
-    with open("1_kline_info.json") as json_file:
+    global result_count
+    result_count += 1
+    result_file_name = f"{result_count}_result.json"
+    old_result_file_name = f"{result_count - 1}_result.json"
+    old_kline_info_name = f"{result_count}_kline_info.json"
+
+    with open(old_kline_info_name) as json_file:
         kline_info = json.load(json_file)
         uptrend_list_old = []
         uptrend_entry_old = []
@@ -50,12 +56,6 @@ def step2():
             sideway_tickers = func_claculate_trend.get_sideway_ticker(kline_info)
             sideway_zscore = func_claculate_trend.get_sideway_zscore(sideway_tickers, kline_info)
             sideway_long_entry, sideway_short_entry = func_claculate_trend.get_sideway_entry(sideway_zscore)
-
-            global result_count
-            result_count += 1
-            result_file_name = f"{result_count}_result.json"
-            old_result_file_name = f"{result_count - 1}_result.json"
-            old_kline_info_name = f"{result_count}_kline_info.json"
 
             # comment out this block on first run
             with open(old_result_file_name) as json_file2:

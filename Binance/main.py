@@ -55,7 +55,7 @@ def step2():
             result_count += 1
             result_file_name = f"{result_count}_result.json"
             old_result_file_name = f"{result_count - 1}_result.json"
-            old_kline_info_name = f"{result_count - 1}_kline_info.json"
+            old_kline_info_name = f"{result_count}_kline_info.json"
 
             # comment out this block on first run
             with open(old_result_file_name) as json_file2:

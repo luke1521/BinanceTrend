@@ -133,7 +133,7 @@ def step2():
             print(message)
             telegram_message = func_claculate_trend.send_telegram_message(message)
             print(telegram_message)
-            os.remove("/home/ubuntu/BinanceTrend/Binance/1_kilne_info.json")
+            os.remove("/home/ubuntu/BinanceTrend/Binance/1_kline_info.json")
             os.remove(f"/home/ubuntu/BinanceTrend/Binance/{old_result_file_name}")
 
 

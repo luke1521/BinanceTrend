@@ -2,6 +2,7 @@ import func_claculate_trend
 import json
 import time
 from datetime import datetime
+import os
 
 
 def step1():
@@ -26,6 +27,10 @@ def step1():
         print("kline saved successfully.")
 
 
+global result_count
+result_count = 1
+
+
 def step2():
     with open("1_kline_info.json") as json_file:
         kline_info = json.load(json_file)
@@ -44,8 +49,13 @@ def step2():
             sideway_zscore = func_claculate_trend.get_sideway_zscore(sideway_tickers, kline_info)
             sideway_long_entry, sideway_short_entry = func_claculate_trend.get_sideway_entry(sideway_zscore)
 
+            global result_count
+            result_count += 1
+            result_file_name = f"{result_count}_result.json"
+            old_result_file_name = f"{result_count - 1}_result.json"
+
             # comment out this block on first run
-            with open("2_result.json") as json_file2:
+            with open(old_result_file_name) as json_file2:
                 result_old = json.load(json_file2)
                 for ticker in result_old["uptrend_list"]:
                     uptrend_list_old.append(ticker)
@@ -70,7 +80,7 @@ def step2():
             }
 
             if len(result) > 0:
-                with open("2_result.json", "w") as fp:
+                with open(result_file_name, "w") as fp:
                     json.dump(result, fp, indent=4)
 
             uptrend_list_new = list(set(uptrend_list) - set(uptrend_list_old))
@@ -123,8 +133,8 @@ def step2():
             print(message)
             telegram_message = func_claculate_trend.send_telegram_message(message)
             print(telegram_message)
-            json_file.close()
-            json_file2.close()
+            os.remove("/home/ubuntu/BinanceTrend/Binance/1_kilne_info.json")
+            os.remove(f"/home/ubuntu/BinanceTrend/Binance/{old_result_file_name}")
 
 
 if __name__ == "__main__":

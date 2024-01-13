@@ -2,18 +2,10 @@ import func_claculate_trend
 import json
 import time
 from datetime import datetime
-import os
-
-global result_count
-result_count = 1
 
 
 def step1():
     tradeable_tickers = func_claculate_trend.get_tradeable_symbols()
-
-    global result_count
-    result_count += 1
-    kline_info_name = f"{result_count}_kline_info.json"
     counts = 0
     kline_info_dict = {}
     print("Gathering kline info...")
@@ -28,19 +20,13 @@ def step1():
     #     print(f"{counts} items is not stored")
 
     if len(kline_info_dict) > 0:
-        with open(kline_info_name, "w") as fp:
+        with open("1_kline_info.json", "w") as fp:
             json.dump(kline_info_dict, fp, indent=4)
         print("kline saved successfully.")
 
 
 def step2():
-    global result_count
-    result_count += 1
-    result_file_name = f"{result_count}_result.json"
-    old_result_file_name = f"{result_count - 1}_result.json"
-    old_kline_info_name = f"{result_count}_kline_info.json"
-
-    with open(old_kline_info_name) as json_file:
+    with open("1_kline_info.json") as json_file:
         kline_info = json.load(json_file)
         uptrend_list_old = []
         uptrend_entry_old = []
@@ -58,7 +44,7 @@ def step2():
             sideway_long_entry, sideway_short_entry = func_claculate_trend.get_sideway_entry(sideway_zscore)
 
             # comment out this block on first run
-            with open(old_result_file_name) as json_file2:
+            with open("1_result.json") as json_file2:
                 result_old = json.load(json_file2)
                 for ticker in result_old["uptrend_list"]:
                     uptrend_list_old.append(ticker)
@@ -83,7 +69,7 @@ def step2():
             }
 
             if len(result) > 0:
-                with open(result_file_name, "w") as fp:
+                with open("1_result.json", "w") as fp:
                     json.dump(result, fp, indent=4)
 
             uptrend_list_new = list(set(uptrend_list) - set(uptrend_list_old))
@@ -136,8 +122,6 @@ def step2():
             print(message)
             telegram_message = func_claculate_trend.send_telegram_message(message)
             print(telegram_message)
-            os.remove(f"/home/ubuntu/BinanceTrend/Binance/{old_kline_info_name}")
-            os.remove(f"/home/ubuntu/BinanceTrend/Binance/{old_result_file_name}")
 
 
 if __name__ == "__main__":

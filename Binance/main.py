@@ -26,8 +26,9 @@ def step1():
 
 
 def step2():
-    with open("1_kline_info.json") as json_file:
+    with (open("1_kline_info.json") as json_file):
         kline_info = json.load(json_file)
+        zone_tickers_old = []
         uptrend_list_old = []
         uptrend_entry_old = []
         downtrend_list_old = []
@@ -42,6 +43,7 @@ def step2():
             sideway_tickers = func_claculate_trend.get_sideway_ticker(kline_info)
             sideway_zscore = func_claculate_trend.get_sideway_zscore(sideway_tickers, kline_info)
             sideway_long_entry, sideway_short_entry = func_claculate_trend.get_sideway_entry(sideway_zscore)
+            zone_tickers = func_claculate_trend.get_zone_tickers(kline_info)
 
             # comment out this block on first run
             with open("1_result.json") as json_file2:
@@ -58,6 +60,8 @@ def step2():
                     sideway_long_entry_old.append(ticker)
                 for ticker in result_old["sideway_short_entry"]:
                     sideway_short_entry_old.append(ticker)
+                for ticker in result_old["zone"]:
+                    zone_tickers_old.append(ticker)
 
             result = {
                 "uptrend_list": uptrend_list,
@@ -65,7 +69,8 @@ def step2():
                 "downtrend_list": downtrend_list,
                 "downtrend_entry": downtrend_entry,
                 "sideway_long_entry": sideway_long_entry,
-                "sideway_short_entry": sideway_short_entry
+                "sideway_short_entry": sideway_short_entry,
+                "zone": zone_tickers
             }
 
             if len(result) > 0:
@@ -78,6 +83,7 @@ def step2():
             downtrend_entry_new = list(set(downtrend_entry) - set(downtrend_entry_old))
             sideway_long_entry_new = list(set(sideway_long_entry) - set(sideway_long_entry_old))
             sideway_short_entry_new = list(set(sideway_short_entry) - set(sideway_short_entry_old))
+            zone_new = list(set(zone_tickers) - set(zone_tickers_old))
 
             uptrend_list_new_str = "*UPDATE:  " + str(uptrend_list_new).replace("', '", "  ").replace(
                 "['", "").replace("']", "").replace("[", "").replace(
@@ -95,6 +101,9 @@ def step2():
                 "['", "").replace("']", "").replace("[", "").replace(
                 "]", "").replace("_", "") + "*"
             sideway_short_entry_new_str = "*UPDATE:  " + str(sideway_short_entry_new).replace("', '", "  ").replace(
+                "['", "").replace("']", "").replace("[", "").replace(
+                "]", "").replace("_", "") + "*"
+            zone_new_str = "*UPDATE:  " + str(zone_new).replace("', '", "  ").replace(
                 "['", "").replace("']", "").replace("[", "").replace(
                 "]", "").replace("_", "") + "*"
 
@@ -116,9 +125,13 @@ def step2():
             sideway_short_entry_str = "SIDEWAY SHORT:  "+str(sideway_short_entry).replace("', '", "  ").replace(
                                 "['", "").replace("']", "").replace("_", "").replace(
                                 "[", "").replace("]", "") + "\n" + sideway_short_entry_new_str
+            zone_str = "ZONE:  "+str(zone_tickers).replace("', '", "  ").replace(
+                                "['", "").replace("']", "").replace("_", "").replace(
+                                "[", "").replace("]", "") + "\n" + zone_new_str
 
             message = (uptrend_list_str + "\n\n" + uptrend_entry_str + "\n\n" + downtrend_list_str + "\n\n" +
-                       downtrend_entry_str + "\n\n" + sideway_long_entry_str + "\n\n" + sideway_short_entry_str)
+                       downtrend_entry_str + "\n\n" + sideway_long_entry_str + "\n\n" + sideway_short_entry_str +
+                       "\n\n" + zone_str)
             print(message)
             telegram_message = func_claculate_trend.send_telegram_message(message)
             print(telegram_message)

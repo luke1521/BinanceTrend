@@ -200,3 +200,20 @@ def send_telegram_message(message):
         return "Telegram message sent"
     else:
         return "Telegram send failed"
+
+
+def get_zone_tickers(kline):
+    zone_tickers = []
+    for ticker in kline.keys():
+        close = extract_close_price(kline[ticker])
+        ema200 = get_ema(close, 200)[-200:]
+        min_close = min(close[-200:])
+        max_close = max(close[-200:])
+        res_min = []
+        res_max = []
+        for i in ema200:
+            res_min.append((i[0] - min_close) / i[0])
+            res_max.append((max_close - i[0]) / i[0])
+        if np.all(np.array(res_min) < 0.08) and np.all(np.array(res_max) < 0.08):
+            zone_tickers.append(ticker)
+    return zone_tickers

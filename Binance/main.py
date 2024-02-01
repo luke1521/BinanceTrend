@@ -24,116 +24,71 @@ def step1():
             json.dump(kline_info_dict, fp, indent=4)
         print("kline saved successfully.")
 
+    print("Gathering funding rate...")
+    funding_rate = func_claculate_trend.get_funding_rate(tradeable_tickers)
+    if len(funding_rate) > 0:
+        with open("1_funding_rate.json", "w") as fp:
+            json.dump(funding_rate, fp, indent=4)
+        print("funding rate saved successfully.")
+
 
 def step2():
     with (open("1_kline_info.json") as json_file):
         kline_info = json.load(json_file)
-        zone_tickers_old = []
-        uptrend_list_old = []
-        uptrend_entry_old = []
-        downtrend_list_old = []
-        downtrend_entry_old = []
-        sideway_long_entry_old = []
-        sideway_short_entry_old = []
+        uptrend_list = []
+        downtrend_list = []
         if len(kline_info) > 0:
-            uptrend_list = func_claculate_trend.get_up_trend(kline_info)
+            new_uptrend_list = func_claculate_trend.get_up_trend(kline_info)
+            if len(new_uptrend_list) > 0:
+                for i in new_uptrend_list:
+                    func_claculate_trend.add_to_self_remove_list(i, uptrend_list)
+            new_downtrend_list = func_claculate_trend.get_down_trend(kline_info)
+            if len(new_downtrend_list) > 0:
+                for i in new_downtrend_list:
+                    func_claculate_trend.add_to_self_remove_list(i, downtrend_list)
+
             uptrend_entry = func_claculate_trend.get_up_trend_entry_zone(uptrend_list, kline_info)
-            downtrend_list = func_claculate_trend.get_down_trend(kline_info)
             downtrend_entry = func_claculate_trend.get_down_trend_entry_zone(downtrend_list, kline_info)
-            sideway_tickers = func_claculate_trend.get_sideway_ticker(kline_info)
-            sideway_zscore = func_claculate_trend.get_sideway_zscore(sideway_tickers, kline_info)
-            sideway_long_entry, sideway_short_entry = func_claculate_trend.get_sideway_entry(sideway_zscore)
-            zone_tickers = func_claculate_trend.get_zone_tickers(kline_info)
 
-            # comment out this block on first run
-            with open("1_result.json") as json_file2:
-                result_old = json.load(json_file2)
-                for ticker in result_old["uptrend_list"]:
-                    uptrend_list_old.append(ticker)
-                for ticker in result_old["uptrend_entry"]:
-                    uptrend_entry_old.append(ticker)
-                for ticker in result_old["downtrend_list"]:
-                    downtrend_list_old.append(ticker)
-                for ticker in result_old["downtrend_entry"]:
-                    downtrend_entry_old.append(ticker)
-                for ticker in result_old["sideway_long_entry"]:
-                    sideway_long_entry_old.append(ticker)
-                for ticker in result_old["sideway_short_entry"]:
-                    sideway_short_entry_old.append(ticker)
-                for ticker in result_old["zone"]:
-                    zone_tickers_old.append(ticker)
+            new_uptrend_list_str = "*New UPTREND LIST:  " + str(new_uptrend_list).replace(
+                                ",", "  ").replace("[", "").replace(
+                                "]", "").replace("_", "").replace("'", "") + "*"
+            uptrend_list_str = "UPTREND LIST:  " + str(uptrend_list).replace(",", "  ").replace(
+                                "[", "").replace("]", "").replace(
+                                "_", "").replace("'", "")
+            uptrend_entry_str = "UPTREND ENTRY:  " + str(uptrend_entry).replace(",", "  ").replace(
+                                "[", "").replace("]", "").replace(
+                                "_", "").replace("'", "")
+            new_downtrend_list_str = "*New DOWNTREND LIST:  " + str(new_downtrend_list).replace(
+                                ",", "  ").replace("[", "").replace(
+                                "]", "").replace("_", "").replace("'", "") + "*"
+            downtrend_list_str = "DOWNTREND LIST:  " + str(downtrend_list).replace(",", "  ").replace(
+                                "[", "").replace("]", "").replace(
+                                "_", "").replace("'", "")
+            downtrend_entry_str = "DOWNTREND ENTRY:  " + str(downtrend_entry).replace(",", "  ").replace(
+                                "[", "").replace("]", "").replace(
+                                "_", "").replace("'", "")
 
-            result = {
-                "uptrend_list": uptrend_list,
-                "uptrend_entry": uptrend_entry,
-                "downtrend_list": downtrend_list,
-                "downtrend_entry": downtrend_entry,
-                "sideway_long_entry": sideway_long_entry,
-                "sideway_short_entry": sideway_short_entry,
-                "zone": zone_tickers
-            }
-
-            if len(result) > 0:
-                with open("1_result.json", "w") as fp:
-                    json.dump(result, fp, indent=4)
-
-            uptrend_list_new = list(set(uptrend_list) - set(uptrend_list_old))
-            uptrend_entry_new = list(set(uptrend_entry) - set(uptrend_entry_old))
-            downtrend_list_new = list(set(downtrend_list) - set(downtrend_list_old))
-            downtrend_entry_new = list(set(downtrend_entry) - set(downtrend_entry_old))
-            sideway_long_entry_new = list(set(sideway_long_entry) - set(sideway_long_entry_old))
-            sideway_short_entry_new = list(set(sideway_short_entry) - set(sideway_short_entry_old))
-            zone_new = list(set(zone_tickers) - set(zone_tickers_old))
-
-            uptrend_list_new_str = "*UPDATE:  " + str(uptrend_list_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace(
-                "]", "").replace("_", "") + "*"
-            uptrend_entry_new_str = "*UPDATE:  " + str(uptrend_entry_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace(
-                "]", "").replace("_", "") + "*"
-            downtrend_list_new_str = "*UPDATE:  " + str(downtrend_list_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace(
-                "]", "").replace("_", "") + "*"
-            downtrend_entry_new_str = "*UPDATE:  " + str(downtrend_entry_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace(
-                "]", "").replace("_", "") + "*"
-            sideway_long_entry_new_str = "*UPDATE:  " + str(sideway_long_entry_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace(
-                "]", "").replace("_", "") + "*"
-            sideway_short_entry_new_str = "*UPDATE:  " + str(sideway_short_entry_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace(
-                "]", "").replace("_", "") + "*"
-            zone_new_str = "*UPDATE:  " + str(zone_new).replace("', '", "  ").replace(
-                "['", "").replace("']", "").replace("[", "").replace(
-                "]", "").replace("_", "") + "*"
-
-            uptrend_list_str = "UPTREND LIST:  " + str(uptrend_list).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace("_", "").replace(
-                                "[", "").replace("]", "") + "\n" + uptrend_list_new_str
-            uptrend_entry_str = "UPTREND ENTRY:  "+str(uptrend_entry).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace("_", "").replace(
-                                "[", "").replace("]", "") + "\n" + uptrend_entry_new_str
-            downtrend_list_str = "DOWNTREND LIST:  " + str(downtrend_list).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace("_", "").replace(
-                                "[", "").replace("]", "") + "\n" + downtrend_list_new_str
-            downtrend_entry_str = "DOWNTREND ENTRY:  "+str(downtrend_entry).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace("_", "").replace(
-                                "[", "").replace("]", "") + "\n" + downtrend_entry_new_str
-            sideway_long_entry_str = "SIDEWAY LONG:  "+str(sideway_long_entry).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace("_", "").replace(
-                                "[", "").replace("]", "") + "\n" + sideway_long_entry_new_str
-            sideway_short_entry_str = "SIDEWAY SHORT:  "+str(sideway_short_entry).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace("_", "").replace(
-                                "[", "").replace("]", "") + "\n" + sideway_short_entry_new_str
-            zone_str = "ZONE:  "+str(zone_tickers).replace("', '", "  ").replace(
-                                "['", "").replace("']", "").replace("_", "").replace(
-                                "[", "").replace("]", "") + "\n" + zone_new_str
-
-            message = (uptrend_list_str + "\n\n" + uptrend_entry_str + "\n\n" + downtrend_list_str + "\n\n" +
-                       downtrend_entry_str + "\n\n" + sideway_long_entry_str + "\n\n" + sideway_short_entry_str +
-                       "\n\n" + zone_str)
+            message = (new_uptrend_list_str + "\n" + uptrend_list_str + "\n" + uptrend_entry_str + "\n\n" +
+                       new_downtrend_list_str + "\n" + downtrend_list_str + "\n" + downtrend_entry_str + "\n")
             print(message)
-            telegram_message = func_claculate_trend.send_telegram_message(message)
+
+            if len(new_uptrend_list) > 0 or len(uptrend_list) > 0 or len(new_downtrend_list) > 0 or len(downtrend_list) > 0:
+                telegram_message = func_claculate_trend.send_telegram_message(message)
+                print(telegram_message)
+
+    with open("1_funding_rate.json") as json_file2:
+        funding_rate = json.load(json_file2)
+        extreme_funding_rate = {}
+        for ticker in funding_rate.keys():
+            if funding_rate[ticker] >= 1 or funding_rate[ticker] <= -1:
+                extreme_funding_rate[ticker] = funding_rate[ticker]
+        extreme_funding_rate_str = "*EXTREME FUNDING RATE:*  " + str(extreme_funding_rate).replace(
+            "{", "").replace("}", "").replace("'", "").replace(
+            ",", ", ").replace("-", "\-").replace(".", "\.")
+        print(extreme_funding_rate_str)
+        if len(extreme_funding_rate) > 0:
+            telegram_message = func_claculate_trend.send_telegram_message(extreme_funding_rate_str)
             print(telegram_message)
 
 
@@ -144,4 +99,4 @@ if __name__ == "__main__":
         current_time = now.strftime('%H:%M:%S')
         print(current_time)
         step2()
-        time.sleep(3560)
+        time.sleep(3600)

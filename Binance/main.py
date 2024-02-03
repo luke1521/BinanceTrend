@@ -27,26 +27,51 @@ def step1():
     print("Gathering funding rate...")
     funding_rate = func_claculate_trend.get_funding_rate(tradeable_tickers)
     if len(funding_rate) > 0:
-        with open("1_funding_rate.json", "w") as fp:
+        with open("1_raw_funding_rate.json", "w") as fp:
             json.dump(funding_rate, fp, indent=4)
         print("funding rate saved successfully.")
 
 
 def step2():
-    with (open("1_kline_info.json") as json_file):
+    with open("1_kline_info.json") as json_file:
         kline_info = json.load(json_file)
-        uptrend_list = []
-        downtrend_list = []
+        new_up_trend_value = []
+        new_down_trend_value = []
         if len(kline_info) > 0:
             new_uptrend_list = func_claculate_trend.get_up_trend(kline_info)
             if len(new_uptrend_list) > 0:
                 for i in new_uptrend_list:
-                    func_claculate_trend.add_to_self_remove_list(i, uptrend_list)
+                    new_up_trend_value.append([i, time.time()])
             new_downtrend_list = func_claculate_trend.get_down_trend(kline_info)
             if len(new_downtrend_list) > 0:
                 for i in new_downtrend_list:
-                    func_claculate_trend.add_to_self_remove_list(i, downtrend_list)
+                    new_down_trend_value.append([i, time.time()])
 
+            old_up_trend_list = []
+            old_up_trend_list_less3d = []
+            old_down_trend_list = []
+            old_down_trend_list_less3d = []
+            # comment out this block on first run
+            with open("1_trend_list.json") as json_file2:
+                old_trend_list_info = json.load(json_file2)
+                for i in old_trend_list_info["up_trend"]:
+                    if (time.time() - i[1]) < 259200:
+                        old_up_trend_list.append(i[0])
+                        old_up_trend_list_less3d.append(i)
+                for i in old_trend_list_info["down_trend"]:
+                    if (time.time() - i[1]) < 259200:
+                        old_down_trend_list.append(i[0])
+                        old_down_trend_list_less3d.append(i)
+
+            trend_list_file = {
+                "up_trend": old_up_trend_list_less3d + new_up_trend_value,
+                "down_trend": old_down_trend_list_less3d + new_down_trend_value
+            }
+            with open("1_trend_list.json", "w") as fp:
+                json.dump(trend_list_file, fp, indent=4)
+
+            uptrend_list = new_uptrend_list + old_up_trend_list
+            downtrend_list = new_uptrend_list + old_down_trend_list
             uptrend_entry = func_claculate_trend.get_up_trend_entry_zone(uptrend_list, kline_info)
             downtrend_entry = func_claculate_trend.get_down_trend_entry_zone(downtrend_list, kline_info)
 
@@ -77,8 +102,8 @@ def step2():
                 telegram_message = func_claculate_trend.send_telegram_message(message)
                 print(telegram_message)
 
-    with open("1_funding_rate.json") as json_file2:
-        funding_rate = json.load(json_file2)
+    with open("1_raw_funding_rate.json") as json_file3:
+        funding_rate = json.load(json_file3)
         extreme_funding_rate = {}
         for ticker in funding_rate.keys():
             if funding_rate[ticker] >= 1 or funding_rate[ticker] <= -1:
@@ -92,6 +117,7 @@ def step2():
             print(telegram_message)
 
 
+# 1 * * * * cd /home/ubuntu/BinanceTrend/Binance && /bin/timeout -s 2 180 python main.py
 if __name__ == "__main__":
     while True:
         step1()

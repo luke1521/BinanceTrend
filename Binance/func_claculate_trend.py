@@ -160,14 +160,14 @@ def get_down_trend_entry_zone(uptrend_tickers, kline):
     return down_trend_entry_ticker
 
 
-def remove_from_list(item, mylist):
-    mylist.remove(item)
-    print(f"删除了列表中的项: {item}")
-
-
-def add_to_self_remove_list(item, mylist):
-    mylist.append(item)
-    threading.Timer(259200, remove_from_list, args=(item, mylist)).start()
+# def remove_from_list(item, mylist):
+#     mylist.remove(item)
+#     print(f"删除了列表中的项: {item}")
+#
+#
+# def add_to_self_remove_list(item, mylist):
+#     mylist.append(item)
+#     threading.Timer(259200, remove_from_list, args=(item, mylist)).start()
 
 
 def send_telegram_message(message):

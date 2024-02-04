@@ -27,7 +27,7 @@ def step1():
     print("Gathering funding rate...")
     funding_rate = func_claculate_trend.get_funding_rate(tradeable_tickers)
     if len(funding_rate) > 0:
-        with open("1_raw_funding_rate.json", "w") as fp:
+        with open("1_funding_rate.json", "w") as fp:
             json.dump(funding_rate, fp, indent=4)
         print("funding rate saved successfully.")
 
@@ -71,7 +71,7 @@ def step2():
                 json.dump(trend_list_file, fp, indent=4)
 
             uptrend_list = new_uptrend_list + old_up_trend_list
-            downtrend_list = new_uptrend_list + old_down_trend_list
+            downtrend_list = new_downtrend_list + old_down_trend_list
             uptrend_entry = func_claculate_trend.get_up_trend_entry_zone(uptrend_list, kline_info)
             downtrend_entry = func_claculate_trend.get_down_trend_entry_zone(downtrend_list, kline_info)
 
@@ -102,7 +102,7 @@ def step2():
                 telegram_message = func_claculate_trend.send_telegram_message(message)
                 print(telegram_message)
 
-    with open("1_raw_funding_rate.json") as json_file3:
+    with open("1_funding_rate.json") as json_file3:
         funding_rate = json.load(json_file3)
         extreme_funding_rate = {}
         for ticker in funding_rate.keys():

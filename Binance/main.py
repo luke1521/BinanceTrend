@@ -72,30 +72,30 @@ def step2():
 
             uptrend_list = new_uptrend_list + old_up_trend_list
             downtrend_list = new_downtrend_list + old_down_trend_list
-            uptrend_entry = func_claculate_trend.get_up_trend_entry_zone(uptrend_list, kline_info)
-            downtrend_entry = func_claculate_trend.get_down_trend_entry_zone(downtrend_list, kline_info)
+            # uptrend_entry = func_claculate_trend.get_up_trend_entry_zone(uptrend_list, kline_info)
+            # downtrend_entry = func_claculate_trend.get_down_trend_entry_zone(downtrend_list, kline_info)
 
-            new_uptrend_list_str = "*New UPTREND LIST:  " + str(new_uptrend_list).replace(
+            new_uptrend_list_str = "*New UPTREND:  " + str(new_uptrend_list).replace(
                                 ",", "  ").replace("[", "").replace(
                                 "]", "").replace("_", "").replace("'", "") + "*"
             uptrend_list_str = "UPTREND LIST:  " + str(uptrend_list).replace(",", "  ").replace(
                                 "[", "").replace("]", "").replace(
                                 "_", "").replace("'", "")
-            uptrend_entry_str = "UPTREND ENTRY:  " + str(uptrend_entry).replace(",", "  ").replace(
-                                "[", "").replace("]", "").replace(
-                                "_", "").replace("'", "")
-            new_downtrend_list_str = "*New DOWNTREND LIST:  " + str(new_downtrend_list).replace(
+            # uptrend_entry_str = "UPTREND ENTRY:  " + str(uptrend_entry).replace(",", "  ").replace(
+            #                     "[", "").replace("]", "").replace(
+            #                     "_", "").replace("'", "")
+            new_downtrend_list_str = "*New DOWNTREND:  " + str(new_downtrend_list).replace(
                                 ",", "  ").replace("[", "").replace(
                                 "]", "").replace("_", "").replace("'", "") + "*"
             downtrend_list_str = "DOWNTREND LIST:  " + str(downtrend_list).replace(",", "  ").replace(
                                 "[", "").replace("]", "").replace(
                                 "_", "").replace("'", "")
-            downtrend_entry_str = "DOWNTREND ENTRY:  " + str(downtrend_entry).replace(",", "  ").replace(
-                                "[", "").replace("]", "").replace(
-                                "_", "").replace("'", "")
+            # downtrend_entry_str = "DOWNTREND ENTRY:  " + str(downtrend_entry).replace(",", "  ").replace(
+            #                     "[", "").replace("]", "").replace(
+            #                     "_", "").replace("'", "")
 
-            message = (new_uptrend_list_str + "\n" + uptrend_list_str + "\n" + uptrend_entry_str + "\n\n" +
-                       new_downtrend_list_str + "\n" + downtrend_list_str + "\n" + downtrend_entry_str + "\n")
+            message = (new_uptrend_list_str + "\n" + uptrend_list_str + "\n" + "\n\n" +
+                       new_downtrend_list_str + "\n" + downtrend_list_str + "\n" + "\n")
             print(message)
 
             if len(new_uptrend_list) > 0 or len(uptrend_list) > 0 or len(new_downtrend_list) > 0 or len(downtrend_list) > 0:

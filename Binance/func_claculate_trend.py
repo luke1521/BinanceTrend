@@ -5,11 +5,10 @@ import time
 import numpy as np
 import math
 import requests
-import threading
 
 
 um_futures_client = UMFutures()
-time_start_date = datetime.datetime.now() - datetime.timedelta(hours=500)
+time_start_date = datetime.datetime.now() - datetime.timedelta(hours=2000)
 time_start_second = int(time_start_date.timestamp()) * 1000
 
 
@@ -33,7 +32,7 @@ def get_funding_rate(tradeable_tickers):
 
 
 def get_kline(tradeable_tickers):
-    price = um_futures_client.klines(symbol=tradeable_tickers, interval="1h", startTime=time_start_second)
+    price = um_futures_client.klines(symbol=tradeable_tickers, interval="4h", startTime=time_start_second)
     time.sleep(0.1)
     if len(price) != 500:
         return []
@@ -62,10 +61,10 @@ def get_up_trend(kline):
     ema_slow = {}
     for ticker in kline.keys():
         close = extract_close_price(kline[ticker])
-        ema89 = get_ema(close, 89)[-200:]
-        ema144 = get_ema(close, 144)[-200:]
-        ema89_201 = get_ema(close, 89)[-201]
-        ema144_201 = get_ema(close, 144)[-201]
+        ema89 = get_ema(close, 89)[-100:]
+        ema144 = get_ema(close, 144)[-100:]
+        ema89_201 = get_ema(close, 89)[-101]
+        ema144_201 = get_ema(close, 144)[-101]
         ema89 = [item for sublist in ema89 for item in sublist]
         ema144 = [item for sublist in ema144 for item in sublist]
 
@@ -114,10 +113,10 @@ def get_down_trend(kline):
     ema_slow = {}
     for ticker in kline.keys():
         close = extract_close_price(kline[ticker])
-        ema89 = get_ema(close, 89)[-200:]
-        ema144 = get_ema(close, 144)[-200:]
-        ema89_201 = get_ema(close, 89)[-201]
-        ema144_201 = get_ema(close, 144)[-201]
+        ema89 = get_ema(close, 89)[-100:]
+        ema144 = get_ema(close, 144)[-100:]
+        ema89_201 = get_ema(close, 89)[-101]
+        ema144_201 = get_ema(close, 144)[-101]
         ema89 = [item for sublist in ema89 for item in sublist]
         ema144 = [item for sublist in ema144 for item in sublist]
 
